@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="stuff-box black"><h1>Vue.js Weather App</h1></div>
+    <div class="stuff-box blue">
+        <p>This app request the user's IP address, then displays local weatherJson data.</p>
+        <p v-if="post.ip_address">Your IP Address: {{ post.ip_address }}</p>
+    </div>
+    <div class="stuff-box blue">
+        <h2>Your Location</h2>
+        <p v-if="post.city || post.region || post.country || post.latitude || post.longitude">You are located in {{ post.city}},
+            {{ post.region}}, {{ post.country}} at coordinates ({{post.latitude}},
+            {{ post.longitude }})</p>
+        <p v-else>Error: Could not fetch location data.</p>
+    </div>
+    <div class="stuff-box yellow">
+        <h2>Current Conditions</h2>
+        <div v-if="weatherJson.weather_data !== 'Fetching Weather Data...'">
+            <ul v-if="weatherJson_error === false">
+                <h3>Current Weather conditions @ {{new Date(weatherJson.dt * 1000).toLocaleString()}}</h3>
+                <li>Current Temperature: {{ weatherJson.main.temp }} &#8457</li>
+                <li>High: {{ weatherJson.main.temp_max }} &#8457</li>
+                <li>Low: {{ weatherJson.main.temp_min }} &#8457</li>
+                <li>Conditions: {{weatherJson.weather[0].main}}, {{weatherJson.weather[0].description}}</li>
+                <li>Humidity: {{weatherJson.main.humidity}}%</li>
+                <li>Pressure: {{weatherJson.main.pressure}} hPa</li>
+            </ul>
+        </div>
+        <ul v-else>Error: Could not fetch weather data.</ul>
+    </div>
+    <div class="stuff-box cyan" >
+        <h2>5 day 3-hour Forecast</h2>
+        <br>
+        <div v-if="forecast_error === false && weatherJson_error === false">
+            <span class="counters" style="color:red;">{{ unlikely_count }} unlikely</span> <span class="counters" style="color:grey;">{{neutral_count}} neutral</span> <span class="counters" style="color: green;"> {{ likely_count }} likely</span>
+            <div v-for='(item, idx) in this.forecast.list'
+                 class="stuff-box neutral"
+                 :class="{}"
+                 @click="forecastToggle"
+                 v-bind:data-index=idx>
+                <ul>Conditions @ {{new Date(item.dt * 1000).toLocaleString()}}
+                    <li>Temperature: {{ item.main.temp }} &#8457</li>
+                    <li>Conditions: {{ item.weather[0].main }}</li>
+                    <li>Humidity: {{ item.main.humidity }}%</li>
+                    <li>Pressure: {{ item.main.pressure }} hPa</li>
+                </ul>
+            </div>
+        </div>
+        <div v-else>Error: Could not fetch forecast data.</div>
+        <br>
+    </div>
+</div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+
+                return {
+                    'post': {'ip_address': "Fetching IP Address..."},
+                    'weatherJson': {'weather_data': "Fetching Weather Data..."},
+                    'weatherJson_error': false,
+                    'states': ['neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
+                                'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
+                                'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
+                                'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral',
+                                'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral'],
+                    'forecast': {},
+                    'forecast_error': false,
+                    'unlikely_count': 0,
+                    'neutral_count': 40,
+                    'likely_count': 0,
+                };
+            },
+            created() {
+                    fetch('https://ipgeolocation.abstractapi.com/v1/?api_key=18a0253339e54f20a0b978738a7468cf')
+                    .then(response => response.json())
+                    .catch(resp => {
+                        if (resp.ok) {return resp.json()}
+                        throw this.post.ip_address = 'Error: Could not fetch IP Address.'
+                    })
+                    .then(json => {
+                        this.post = json;
+                        fetch(`https://api.openweathermap.org/data/2.5/weather?` + new URLSearchParams({
+                        lat: this.post.latitude,
+                        lon: this.post.longitude,
+                        units: 'imperial',
+                        appid: 'caedf48475c87b6f02d87d73ea0ef180'
+                    }))
+                    .then(response => response.json())
+                    .catch(resp => {
+                        if (resp.ok) {
+                            return resp.json()
+                        }
+                        throw this.weatherJson_error = true;
+                    })
+                    .then(json => {
+                        this.weatherJson = json;
+                    })
+
+                    .then(() => fetch(`https://api.openweathermap.org/data/2.5/forecast?` + new URLSearchParams({
+                        lat: this.post.latitude,
+                        lon: this.post.longitude,
+                        units: 'imperial',
+                        appid: 'caedf48475c87b6f02d87d73ea0ef180'
+                    }))
+                    .then(response => response.json())
+                    .catch(resp => {
+                        if (resp.ok) {
+                            return resp.json();
+                        }
+                        throw this.forecast_error = true;
+                    })
+                    .then(json => {
+                        this.forecast.list = json.list;
+                    }))
+                })
+            },
+            methods: {
+                forecastToggle(event){
+                    let div = event.currentTarget;
+                    let idx = div.getAttribute('data-index');
+                    if (this.states[idx] === 'neutral'){
+                        --this.neutral_count;
+                        ++this.likely_count;
+                        this.states[idx] = 'likely';
+                    }
+                    else if (this.states[idx] === 'likely') {
+                        --this.likely_count;
+                        ++this.unlikely_count;
+                        this.states[idx] = 'unlikely';
+                    }
+                    else if (this.states[idx] === 'unlikely') {
+                        --this.unlikely_count;
+                        ++this.neutral_count;
+                        this.states[idx] = 'neutral';
+                    }
+                    div.setAttribute('class', 'stuff-box')
+                    div.classList.add(this.states[idx]);
+                },
+            }
+        });
+
+        const vm = app.mount('#app');
+    </script>
+</body>
+</html>

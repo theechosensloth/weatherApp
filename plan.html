@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 5 Development Plan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="Requirements">
+    <h2>Phase 0: Requirements Specification (20%)</h2>
+    <p>
+       The purpose of this project is to teach me how to use Vue.js and how it is better than plain Vanilla.js. Using
+        Vue.js, I must create a weather app that displays the user's IP address and location, the current conditions
+        at that location, and a 5 day 3-hour weather forecast.
+    </p>
+    <ul>
+        <li>IP Address fetch<p> This fetch uses the user's IP address to fetch there location data, which in turn can be
+            plugged into the next fetch.</p></li>
+
+        <li>The current weather fetch request<p>This fetch request goes to a different API endpoint that gets all the
+            relevant data for today's weather.</p></li>
+        <li>The weather forecast fetch request.<p>This fetch request goes to a different API endpoint that gets all the
+            relevant data for the next 5 day's worth of weather, in 3-hour increments.</p></li>
+    </ul>
+    <h3>Problem this program aims to solve:</h3>
+    <p>This program aims to teach me about fetch request chaining in Vue.js, which is a powerful way to use mulitple
+        API endpoints in a time-dependant fashion.</p>
+    <h3>Data used by this program:</h3>
+    <p>This program utilizes the Vue.js framework, which encapsulate more methods than I
+        can name or count accurately. It also uses 3 API endpoints listed above.
+    </p>
+    <h3>Algorithms and Formula:</h3>
+    <p>No true formulation is required in this project aside from v-if-else blocks and fetch requests. </p>
+</div>
+
+<div class="Design">
+
+    <h2>Phase 1: Design (30%)</h2>
+
+    <pre><code>
+        static.css:
+
+                All css given in the assignment description by Erik Falor
+
+        index.html:
+
+                html document that contains html structure for 3 sections: an IP grabber, current weather, and forecast weather.
+
+                Vue.js app structure with the following data:
+                                                                post, which contains all info from IP address fetch request
+                                                                current, which contains all info from current weather fetch request
+                                                                forecast, which contains all info from forecast fetch request
+
+                        created():
+                                    each fetch request is contained here. First, request IP
+                                    then, if IP is fetched successfully, request current and forecast asynchronously
+                                    because both current and forecast are fetched in a then statement of the IP fetch,
+                                    they will depend on data from IP and not be completed until they have that data.
+
+                        methods:
+                                forecastToggle():
+                                    Gets the current div and changes it's color depending on how many times it's clicked.
+    </code></pre>
+</div>
+
+<div class="Implementation">
+    <h2>Phase 2: Implementation (10%)</h2>
+    <ol>Roadblocks:
+        <li> Vue is a very powerful app. I ran into trouble when I initially implemented the forecast fetch in the 'updated()'
+            lifecycle hook. This caused the page to request forecast data every millisecond, which quickly burned my request limit.
+        </li>
+        <li>
+            I had to figure out how to pass a json object from a request into the data() field of the Vue app. This caused
+            some formational changes over time in my app from semi-hardcoded values to just passing the json object directly.
+        </li>
+        <li>
+             I needed to learn how to chain fetch requests together.  This was intimidating at first, but proved simple in
+            implementation.
+        </li>
+    </ol>
+</div>
+
+<div class="Testing">
+<h2>Phase 3: Testing and Debugging (30%)</h2>
+    <ol>Errors that needed fixing:
+        <li>API was fetching every millisecond. Fixed by chaining fetch requests in the created() block rather than the updated() block.</li>
+        <li>Errors were not displaying correctly when the network was failing. Fixed by creating data() attributes that hold boolean values for successful fetch requests.</li>
+        <li>The text for each forecast object was quite small. Fixed by doing some not-so-creative styling.</li>
+    </ol>
+</div>
+
+<div class="Deployment">
+    <h2>Phase 4: Deployment (5%)</h2>
+    <p>Done and done.</p>
+</div>
+
+<div class="Maintenance">
+    <h2>Phase 5: Maintenance (N/A)</h2>
+    <p>This code should last at least until HTTP or Vue get major language-specific changes. All the documentation
+        for this project is here and easily readable. Vue is a funny creature. It contains a lot of code that does
+        things without the user knowing it. For that reason I am tentative to say that this is a secure and robust program.
+        If I understood Django in its entirety, including all security risks and pitfalls, then I would be able to fortify
+        this project more thoroughly. </p>
+</div>
+</body>
+</html>

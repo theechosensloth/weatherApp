@@ -1,0 +1,136 @@
+.expression {
+    background-color: rgba(0, 0, 0, .25);
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #404040;
+    padding: 3px 3px 0;
+    margin: 5px;
+    font-family: monospace;
+    font-size: 200%;
+
+}
+
+nav > ol {
+    display: flex;
+}
+
+nav > ol > li {
+    flex: 1;
+
+}
+
+.disabled {
+    color: grey;
+    text-decoration: underline;
+}
+
+.close, button {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.stuff-box {
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 2px;
+    color: white;
+    font-family: 'helvetica neue', helvetica, sans-serif;
+    letter-spacing: 1px;
+    margin: 10px;
+    padding: 3px 10px;
+    text-align: center;
+    text-shadow: 1px 1px 2px black;
+    font-size: 1.5em;
+    font-size: 80%;
+}
+
+
+.red {
+    border-color: rgb(255, 0, 0);
+    background: rgb(180, 60, 60);
+    box-shadow: 1px 1px 2px rgba(200, 0, 0, 0.4);
+}
+
+.green {
+    border-color: rgb(0, 255, 0);
+    background: rgb(60, 180, 60);
+    box-shadow: 1px 1px 2px rgba(0, 200, 0, 0.4);
+}
+
+.blue, .multiplication {
+    border-color: rgb(0, 0, 255);
+    background: rgb(60, 60, 180);
+    box-shadow: 1px 1px 2px rgba(0, 0, 200, 0.4);
+}
+
+.cyan, .exponentiation {
+    border-color: rgb(0, 255, 255);
+    background: rgb(60, 180, 180);
+    box-shadow: 1px 1px 2px rgba(0, 200, 200, 0.4);
+}
+
+.magenta, .remainder {
+    border-color: rgb(255, 0, 255);
+    background: rgb(180, 60, 180);
+    box-shadow: 1px 1px 2px rgba(200, 0, 200, 0.4);
+}
+
+.yellow, .division {
+    border-color: rgb(255, 255, 0);
+    background: rgb(180, 180, 60);
+    box-shadow: 1px 1px 2px rgba(200, 200, 0, 0.4);
+}
+
+.white {
+    border-color: rgb(255, 255, 255);
+    background: rgb(180, 180, 180);
+    box-shadow: 1px 1px 2px rgba(200, 200, 0, 0.4);
+}
+
+.black {
+    border-color: rgb(0, 0, 0);
+    background: rgb(75, 75, 75);
+    box-shadow: 1px 1px 2px rgba(200, 200, 0, 0.4);
+}
+
+ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-top: 0;
+    font-size: 1.2em;
+    padding-left: 0;
+}
+
+li {
+    align-self: center;
+    justify-self: center;
+    padding: 2px;
+
+}
+h3 {
+    margin-top: 0;
+}
+.neutral {
+    border-color: rgb(0, 0, 0);
+    background: rgb(75, 75, 75);
+    box-shadow: 1px 1px 2px rgba(200, 200, 0, 0.4);
+}
+
+.likely {
+    border-color: rgb(0, 255, 0);
+    background: rgb(60, 180, 60);
+    box-shadow: 1px 1px 2px rgba(0, 200, 0, 0.4);
+}
+
+.unlikely {
+    border-color: rgb(255, 0, 0);
+    background: rgb(180, 60, 60);
+    box-shadow: 1px 1px 2px rgba(200, 0, 0, 0.4);
+}
+
+.counters {
+    font-size: 1.2em;
+}
